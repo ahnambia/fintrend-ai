@@ -23,18 +23,19 @@ Details in `docs/architecture.md` and `docs/data-contracts.md`.
 - `frontend`: Vite app (charts & live feed).
 - `notebooks`: Backtest notebook (later).
 
-## Quickstart (will be enabled Day 2)
-1. Copy `.env.sample` → `.env` and fill values.
-2. `docker compose up` (in `infra/compose/`) — **coming Day 2**.
-
 ## Development
 - Python 3.11+, Node 20+.
 - Formatting/linting via `pre-commit` (ruff/black/mypy).
 - Conventional Commits; branches: `feat/*`, `fix/*`, `chore/*`.
 
+## Quickstart (Day 2)
+
+1. Copy `.env.sample` → `.env`
+2. Run stack:  
+   ```bash
+   docker compose -f infra/compose/docker-compose.yml up --build
+
 ## Roadmap (Day-by-day)
-- **Day 1:** Skeleton, docs, envs, conventions (this commit).
-- **Day 2:** Compose baseline + DB migrations + API health.
 - **Day 3:** RSS/Reddit ingestors → Redis Streams; worker writes to DB.
 - **Day 4:** Price ingestor (API + cached fallback) and prices table.
 - **Day 5:** Sentiment scorer (FinBERT) + `sentiments` writes.
@@ -48,6 +49,8 @@ Details in `docs/architecture.md` and `docs/data-contracts.md`.
 - **Day 13:** Backtest MVP.
 - **Day 14:** Alerts prototype (email/SMS).
 - **Day 15+:** Polish, screenshots, demo script, stretch goals.
+
+
 
 ## License
 MIT. See `LICENSE`.
