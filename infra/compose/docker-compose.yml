@@ -7,8 +7,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: fintrend
-    ports:
-      - "5432:5432"
     volumes:
       - ../../docker-data/db:/var/lib/postgresql/data
 

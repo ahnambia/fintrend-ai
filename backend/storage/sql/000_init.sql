@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS timescaledb;
-
 CREATE TABLE IF NOT EXISTS news_items (
     id UUID PRIMARY KEY,
     source TEXT,
@@ -22,16 +20,19 @@ CREATE TABLE IF NOT EXISTS sentiments (
     run_ts TIMESTAMPTZ DEFAULT now()
 );
 
+-- prices: composite PK that includes the time column
 CREATE TABLE IF NOT EXISTS prices (
-    id BIGSERIAL PRIMARY KEY,
-    ticker TEXT,
-    ts TIMESTAMPTZ,
-    open NUMERIC,
-    high NUMERIC,
-    low NUMERIC,
-    close NUMERIC,
-    volume BIGINT
+  ticker TEXT NOT NULL,
+  ts TIMESTAMPTZ NOT NULL,
+  open NUMERIC,
+  high NUMERIC,
+  low NUMERIC,
+  close NUMERIC,
+  volume BIGINT,
+  id BIGSERIAL,                     -- optional surrogate key (not PK)
+  PRIMARY KEY (ticker, ts)
 );
+
 
 CREATE TABLE IF NOT EXISTS signals (
     id UUID PRIMARY KEY,
