@@ -1,0 +1,27 @@
+# OS/Editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+.mypy_cache/
+.pytest_cache/
+dist/
+build/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+dist/
+coverage/
+
+# Docker
+*.pid
+docker-data/
