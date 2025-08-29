@@ -63,3 +63,34 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+  
+  # Defines new services for RSS producer, Reddit producer, and news worker.
+  producer_rss:
+    image: python:3.11-slim
+    working_dir: /app
+    command: python -m ingestors.rss_producer
+    volumes:
+      - ../../backend:/app
+    env_file: ../../.env
+    depends_on: [redis]
+
+  producer_reddit:
+    image: python:3.11-slim
+    working_dir: /app
+    command: python -m ingestors.reddit_producer
+    volumes:
+      - ../../backend:/app
+    env_file: ../../.env
+    depends_on: [redis]
+
+  worker_news:
+    image: python:3.11-slim
+    working_dir: /app
+    command: python -m workers.news_consumer
+    volumes:
+      - ../../backend:/app
+    env_file: ../../.env
+    depends_on: [redis, db]
+    ports:
+      - "9101:9101"   # Prometheus metrics
+
