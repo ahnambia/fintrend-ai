@@ -67,30 +67,41 @@ services:
   # Defines new services for RSS producer, Reddit producer, and news worker.
   producer_rss:
     image: python:3.11-slim
+    container_name: fintrend-producer-rss
     working_dir: /app
-    command: python -m ingestors.rss_producer
+    command: bash -lc "pip install --no-cache-dir feedparser redis && python -m ingestors.rss_producer"
     volumes:
       - ../../backend:/app
-    env_file: ../../.env
-    depends_on: [redis]
+    env_file:
+      - ../../.env
+    depends_on:
+      - redis
 
   producer_reddit:
     image: python:3.11-slim
+    container_name: fintrend-producer-reddit
     working_dir: /app
-    command: python -m ingestors.reddit_producer
+    command: bash -lc "pip install --no-cache-dir requests feedparser redis && python -m ingestors.reddit_producer"
     volumes:
       - ../../backend:/app
-    env_file: ../../.env
-    depends_on: [redis]
+    env_file:
+      - ../../.env
+    depends_on:
+      - redis
 
   worker_news:
     image: python:3.11-slim
+    container_name: fintrend-worker-news
     working_dir: /app
-    command: python -m workers.news_consumer
+    command: bash -lc "pip install --no-cache-dir redis psycopg2-binary prometheus-client && python -m workers.news_consumer"
     volumes:
       - ../../backend:/app
-    env_file: ../../.env
-    depends_on: [redis, db]
+    env_file:
+      - ../../.env
+    depends_on:
+      - db
+      - redis
     ports:
-      - "9101:9101"   # Prometheus metrics
+      - "9101:9101"   # expose Prometheus metrics to host
+
 
