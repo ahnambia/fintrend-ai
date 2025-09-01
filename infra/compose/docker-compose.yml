@@ -22,7 +22,7 @@ services:
     image: python:3.11-slim
     container_name: fintrend-api
     working_dir: /app
-    command: bash -lc "pip install fastapi uvicorn prometheus-client && uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload"
+    command: bash -lc "pip install fastapi uvicorn prometheus-client psycopg2-binary && uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload"
     volumes:
       - ../../backend:/app
     env_file:
@@ -103,5 +103,39 @@ services:
       - redis
     ports:
       - "9101:9101"   # expose Prometheus metrics to host
-
+  
+  worker_sentiment:
+    image: python:3.11-slim
+    container_name: fintrend-worker-sentiment
+    working_dir: /app
+    command:
+      - bash
+      - -lc
+      - pip install --no-cache-dir torch transformers redis psycopg2-binary prometheus-client && python -m workers.sentiment_consumer
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:postgres@db:5432/fintrend
+      REDIS_URL: redis://redis:6379/0
+      LOG_LEVEL: INFO
+      HF_HOME: /models
+      PYTHONPATH: /app            # ensure /app is on import path
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+      redis:
+        condition: service_started
+        required: true
+    ports:
+      - "9102:9102"
+    volumes:
+      - type: bind
+        source: /Users/abhiramnambiar/Desktop/Abhiram/fintrend-ai/backend
+        target: /app
+        bind:
+          create_host_path: true
+      - type: bind
+        source: /Users/abhiramnambiar/Desktop/Abhiram/fintrend-ai/docker-data/hf
+        target: /models
+        bind:
+          create_host_path: true
 

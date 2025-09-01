@@ -9,3 +9,9 @@ scrape_configs:
   - job_name: "worker_news"
     static_configs:
       - targets: ["worker_news:9101"]
+
+  - job_name: "worker_sentiment"
+    static_configs:
+      - targets: ["worker_sentiment:9102"]
+
+    
